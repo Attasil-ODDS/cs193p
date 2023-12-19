@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    let emojiHalloweens: Array<String> = ["👻","🎃","🕷️","😈","💀"]
-    let emojiVehicles: Array<String> = ["⛴️","🚀","🚁","🚂","🛩️"]
-    let emojiStatus: Array<String> = ["❤️‍🔥","🙏🏻","❄️","🌞","🌛","🍺"]
+    var cardThemes: Array<CardTheme> = [
+        CardTheme(name:"Halloween", emojiThemes:["👻","🎃","🕷️","😈","💀"], symbol:"moon.zzz"),
+        CardTheme(name:"Vehicle", emojiThemes:["⛴️","🚀","🚁","🚂","🛩️"], symbol:"car"),
+        CardTheme(name:"Emoji", emojiThemes:["❤️‍🔥","🙏🏻","❄️","🌞","🌛","🍺"], symbol:"smiley")
+    ]
     @State var cardCount: Int = 8
     @State var emojis: Array<String> =  []
     var body: some View {
@@ -20,9 +22,7 @@ struct ContentView: View {
                 cards
             }
             HStack(spacing: 20){
-                theme(name: "Halloween", emojiSelect: emojiHalloweens, symbol: "person.crop.circle.badge.moon")
-                theme(name: "Halloween", emojiSelect: emojiVehicles, symbol: "car")
-                theme(name: "Halloween", emojiSelect: emojiStatus, symbol: "smiley")
+                themeCards
             }
         }
         .padding()
@@ -38,6 +38,12 @@ struct ContentView: View {
         .foregroundColor(.orange)
     }
     
+    var themeCards: some View {
+        ForEach(cardThemes.indices, id:\.self) { index in
+            theme(name: cardThemes[index].name, emojiSelect: cardThemes[index].emojiThemes, symbol: cardThemes[index].symbol)
+        }
+    }
+    
     func theme(name: String, emojiSelect: Array<String>, symbol: String)-> some View {
         Button(action: {
             emojis=(emojiSelect+emojiSelect).shuffled()
@@ -48,6 +54,12 @@ struct ContentView: View {
             }
         }
     }
+}
+
+struct CardTheme {
+    var name: String
+    var emojiThemes: Array<String>
+    var symbol: String
 }
 
 struct CardView: View {
